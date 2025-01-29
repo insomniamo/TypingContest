@@ -1,0 +1,11 @@
+.letter{
+    font-size: 32px;
+    line-height: 32px;
+
+    &__correct{
+        color: green;
+    }
+    &__incorrect{
+        color: red;
+    }
+}

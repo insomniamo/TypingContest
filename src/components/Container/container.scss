@@ -1,0 +1,13 @@
+@import "../../base/styles/variables.scss";
+
+.container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding-inline: $gap-container-mobile;
+    width: 100%;
+    
+    @media #{$desktop-width} {
+        padding-inline: $gap-container-desktop;
+    }
+}
