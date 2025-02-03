@@ -5,13 +5,13 @@ import { shiftTextUp } from "@utils/redux/slices/textShiftSlice";
 import Word from "@components/Word/Word";
 import "./words.scss";
 
-type Letter = {
+type LetterType = {
   letter: string;
   isCorrect: boolean | null;
 };
 
 type WordType = {
-  word: Letter[];
+  word: LetterType[];
   isActive: boolean;
 };
 
@@ -22,7 +22,9 @@ type WordsProps = {
 const Words: React.FC<WordsProps> = ({ wordsArray }) => {
   const containerRef = useRef<HTMLDivElement>(null);
   const [lines, setLines] = useState<number[]>([]);
+  
   const spacesCount = useSelector((state: RootState) => state.typingGame.spacesCount);
+  const currentInput = useSelector((state: RootState) => state.typingGame.currentInput);
   const translateY = useSelector((state: RootState) => state.textShift.translateY);
   const currentLineIndex = useSelector((state: RootState) => state.textShift.currentLineIndex);
   const dispatch = useDispatch();
@@ -80,18 +82,17 @@ const Words: React.FC<WordsProps> = ({ wordsArray }) => {
     }
   }, [spacesCount, lines, currentLineIndex, dispatch]);
 
+  const activeWordIndex = spacesCount;
+  const activeLetterIndex = wordsArray[activeWordIndex]?.word.length ? currentInput.length - currentInput.lastIndexOf(" ") - 1 : 0;
+
   return (
-  <div className="words">
-    <div
-      className="words__arr"
-      ref={containerRef}
-      style={{ transform: `translateY(${translateY}px)` }}
-    >
-      {wordsArray.map((wordObj, index) => (
-        <Word key={index} wordObj={wordObj} />
-      ))}
+    <div className="words">
+      <div className="words__arr" ref={containerRef} style={{ transform: `translateY(${translateY}px)` }}>
+        {wordsArray.map((wordObj, index) => (
+          <Word key={index} wordObj={wordObj} currentLetterIndex={index === activeWordIndex ? activeLetterIndex : -1} />
+        ))}
+      </div>
     </div>
-  </div>
   );
 };
 

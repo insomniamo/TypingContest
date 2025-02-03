@@ -1,11 +1,39 @@
-.letter{
+@import "../../base/styles/variables.scss";
+.letter {
     font-size: 32px;
     line-height: 32px;
-
-    &__correct{
-        color: green;
+    position: relative;
+  
+    &__correct {
+      color: green;
     }
-    &__incorrect{
-        color: red;
+  
+    &__incorrect {
+      color: red;
+    }
+
+    &__caret{
+        position: absolute;
+        left: -2px;
+        bottom: 0;
+        width: 3.2px;
+        height: 110%;
+        background: $fuel-yellow;
+        border-radius: $roundness;
+        animation: caretFlashSmooth 1s ease infinite;
+        transform-origin: top left;
+
+        @keyframes caretFlashSmooth {
+            0% {
+              opacity: 1;
+            }
+            50% {
+              opacity: 0.2;
+            }
+            100% {
+              opacity: 1;
+            }
+        }
     }
 }
+  

@@ -4,9 +4,10 @@ import "./letter.scss";
 type LetterProps = {
   letter: string;
   isCorrect: boolean | null;
+  isActive: boolean;
 };
 
-const Letter: React.FC<LetterProps> = ({ letter, isCorrect }) => {
+const Letter: React.FC<LetterProps> = ({ letter, isCorrect, isActive }) => {
   return (
     <span
       className={`letter ${
@@ -14,6 +15,7 @@ const Letter: React.FC<LetterProps> = ({ letter, isCorrect }) => {
       }`}
     >
       {letter}
+      {isActive && <span className="letter__caret"></span>}
     </span>
   );
 };
