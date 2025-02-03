@@ -2,7 +2,6 @@ import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { fetchText } from "@utils/redux/api/textAPI";
 import { createWordsArray, Word } from "@utils/createWordsArray";
 
-// Типы состояния
 interface TypingGameState {
   referenceText: string;
   wordsArray: Word[];
@@ -13,7 +12,6 @@ interface TypingGameState {
   error: string | null;
 }
 
-// Изначальное состояние
 const initialState: TypingGameState = {
   referenceText: "",
   wordsArray: [],
@@ -24,7 +22,6 @@ const initialState: TypingGameState = {
   error: null,
 };
 
-// Slice
 const typingGameSlice = createSlice({
   name: "typingGame",
   initialState,
@@ -83,6 +80,5 @@ const typingGameSlice = createSlice({
   },
 });
 
-// Экспортируем экшены и редьюсер
 export const { setInput, resetGame } = typingGameSlice.actions;
 export default typingGameSlice.reducer;

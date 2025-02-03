@@ -3,7 +3,7 @@ import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState, AppDispatch } from "@utils/redux/store";
 import { fetchText } from "@utils/redux/api/textAPI";
-
+import { resetTextShift } from "@utils/redux/slices/textShiftSlice";
 import { setInput, resetGame } from "@utils/redux/slices/typingGameSlice";
 import Words from "@components/Words/Words";
 
@@ -24,6 +24,7 @@ const TypingGame = () => {
   const handleRefreshText = () => {
     dispatch(fetchText());
     dispatch(resetGame());
+    dispatch(resetTextShift());
   };
 
   return (

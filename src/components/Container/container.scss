@@ -6,7 +6,6 @@
     align-items: center;
     padding-inline: $gap-container-mobile;
     width: 100%;
-    
     @media #{$desktop-width} {
         padding-inline: $gap-container-desktop;
     }
