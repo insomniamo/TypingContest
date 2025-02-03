@@ -1,9 +1,14 @@
-// @import "@base/styles/variables.scss"
-
-.words{
-    display: flex;
-    flex-direction: row;
-    flex-wrap: wrap;
-
+.words {
+    position: relative;
     height: 144px;
+    overflow: hidden;
+
+    &__arr{
+        display: flex;
+        flex-direction: row;
+        flex-wrap: wrap;
+        position: relative;
+        transform: translateY(0);
+    }
 }
+  

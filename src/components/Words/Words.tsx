@@ -81,17 +81,17 @@ const Words: React.FC<WordsProps> = ({ wordsArray }) => {
   }, [spacesCount, lines, currentLineIndex, dispatch]);
 
   return (
-    <div className="words-container">
-      <div
-        className="words"
-        ref={containerRef}
-        style={{ transform: `translateY(${translateY}px)` }}
-      >
-        {wordsArray.map((wordObj, index) => (
-          <Word key={index} wordObj={wordObj} />
-        ))}
-      </div>
+  <div className="words">
+    <div
+      className="words__arr"
+      ref={containerRef}
+      style={{ transform: `translateY(${translateY}px)` }}
+    >
+      {wordsArray.map((wordObj, index) => (
+        <Word key={index} wordObj={wordObj} />
+      ))}
     </div>
+  </div>
   );
 };
 
