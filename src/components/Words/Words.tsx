@@ -22,6 +22,7 @@ type WordsProps = {
 const Words: React.FC<WordsProps> = ({ wordsArray }) => {
   const containerRef = useRef<HTMLDivElement>(null);
   const [lines, setLines] = useState<number[]>([]);
+  const [errorWords, setErrorWords] = useState<Set<number>>(new Set()); // Состояние для ошибок
   
   const spacesCount = useSelector((state: RootState) => state.typingGame.spacesCount);
   const currentInput = useSelector((state: RootState) => state.typingGame.currentInput);
@@ -34,7 +35,6 @@ const Words: React.FC<WordsProps> = ({ wordsArray }) => {
 
     const children = Array.from(containerRef.current.children) as HTMLElement[];
     const newLines: number[] = [];
-
     let currentLineCount = 0;
     let lastOffsetTop = children[0]?.offsetTop || 0;
 
@@ -45,7 +45,6 @@ const Words: React.FC<WordsProps> = ({ wordsArray }) => {
         lastOffsetTop = child.offsetTop;
       }
       currentLineCount++;
-
       if (index === children.length - 1) {
         newLines.push(currentLineCount);
       }
@@ -55,13 +54,27 @@ const Words: React.FC<WordsProps> = ({ wordsArray }) => {
   };
 
   useEffect(() => {
+    const newErrorWords = new Set<number>();
+
+    wordsArray.forEach((wordObj, index) => {
+      if (index < spacesCount) {
+        if (wordObj.word.some((char) => char.isCorrect === false)) {
+          newErrorWords.add(index);
+        }
+      }
+      if (index < spacesCount && wordObj.word.some((char) => char.isCorrect === false)) {
+        newErrorWords.add(index);
+      }
+    });
+
+    setErrorWords(newErrorWords);
+  }, [wordsArray, spacesCount, lines]);
+
+  useEffect(() => {
     calculateLines();
 
     const observer = new ResizeObserver(calculateLines);
-
-    if (containerRef.current) {
-      observer.observe(containerRef.current);
-    }
+    if (containerRef.current) observer.observe(containerRef.current);
 
     const handleResize = () => calculateLines();
     window.addEventListener("resize", handleResize);
@@ -75,7 +88,6 @@ const Words: React.FC<WordsProps> = ({ wordsArray }) => {
   useEffect(() => {
     if (lines.length > 1 && currentLineIndex < lines.length) {
       const wordsUpToCurrentLine = lines.slice(0, currentLineIndex + 1).reduce((sum, count) => sum + count, 0);
-
       if (spacesCount >= wordsUpToCurrentLine) {
         dispatch(shiftTextUp());
       }
@@ -83,13 +95,20 @@ const Words: React.FC<WordsProps> = ({ wordsArray }) => {
   }, [spacesCount, lines, currentLineIndex, dispatch]);
 
   const activeWordIndex = spacesCount;
-  const activeLetterIndex = wordsArray[activeWordIndex]?.word.length ? currentInput.length - currentInput.lastIndexOf(" ") - 1 : 0;
+  const activeLetterIndex = wordsArray[activeWordIndex]?.word.length
+    ? currentInput.length - currentInput.lastIndexOf(" ") - 1
+    : 0;
 
   return (
     <div className="words">
       <div className="words__arr" ref={containerRef} style={{ transform: `translateY(${translateY}px)` }}>
         {wordsArray.map((wordObj, index) => (
-          <Word key={index} wordObj={wordObj} currentLetterIndex={index === activeWordIndex ? activeLetterIndex : -1} />
+          <Word
+            key={index}
+            wordObj={wordObj}
+            currentLetterIndex={index === activeWordIndex ? activeLetterIndex : -1}
+            isError={errorWords.has(index)}
+          />
         ))}
       </div>
     </div>

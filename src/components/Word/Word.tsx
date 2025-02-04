@@ -13,11 +13,12 @@ type WordProps = {
     isActive: boolean;
   };
   currentLetterIndex: number;
+  isError: boolean;
 };
 
-const Word: React.FC<WordProps> = ({ wordObj, currentLetterIndex }) => {
+const Word: React.FC<WordProps> = ({ wordObj, currentLetterIndex, isError }) => {
   return (
-    <div className={`word ${wordObj.isActive ? "active" : ""}`}>
+    <div className={`word ${wordObj.isActive ? "active" : ""} ${isError ? "word__error" : ""}`}>
       {wordObj.word.map((charObj, index) => (
         <Letter key={index} letter={charObj.letter} isCorrect={charObj.isCorrect} isActive={index === currentLetterIndex} />
       ))}

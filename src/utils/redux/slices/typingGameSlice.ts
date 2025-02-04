@@ -27,14 +27,34 @@ const typingGameSlice = createSlice({
   initialState,
   reducers: {
     setInput(state, action: PayloadAction<string>) {
-      const input = action.payload;
-      const spacesCount = input.split(" ").length - 1;
+      let input = action.payload;
       let errorCount = state.errorCount;
-
+    
+      if (input.length > state.currentInput.length) {
+        input = input.replace(/\s{2,}(?=\S)/g, " ");
+      }
+    
+      input = input.replace(/^\s+/, "");
+    
+      let spacesCount = 0;
+      let lastWasSpace = false;
+    
+      for (let i = 0; i < input.length; i++) {
+        if (input[i] === " ") {
+          if (!lastWasSpace) {
+            spacesCount++;
+          }
+          lastWasSpace = true;
+        } else {
+          lastWasSpace = false;
+        }
+      }
+    
+      const words = input.trim().split(/\s+/);
       state.wordsArray = state.wordsArray.map((wordObj, wordIndex) => {
-        const inputWord = input.trim().split(/\s+/)[wordIndex] || "";
+        const inputWord = words[wordIndex] || "";
         const isActive = wordIndex === spacesCount;
-
+    
         return {
           ...wordObj,
           isActive,
@@ -50,16 +70,20 @@ const typingGameSlice = createSlice({
           }),
         };
       });
-
+    
       state.currentInput = input;
       state.spacesCount = spacesCount;
       state.errorCount = errorCount;
-    },
+    }
+    ,
     resetGame(state) {
       state.currentInput = "";
       state.errorCount = 0;
       state.spacesCount = 0;
-      state.wordsArray = createWordsArray(state.referenceText);
+      state.wordsArray = createWordsArray(state.referenceText).map((wordObj, index) => ({
+        ...wordObj,
+        isActive: index === 0,
+      }));
     },
   },
   extraReducers: (builder) => {
@@ -70,7 +94,10 @@ const typingGameSlice = createSlice({
       })
       .addCase(fetchText.fulfilled, (state, action: PayloadAction<string>) => {
         state.referenceText = action.payload;
-        state.wordsArray = createWordsArray(action.payload); // Создаём массив слов
+        state.wordsArray = createWordsArray(action.payload).map((wordObj, index) => ({
+          ...wordObj,
+          isActive: index === 0,
+        }));
         state.loading = false;
       })
       .addCase(fetchText.rejected, (state, action) => {
