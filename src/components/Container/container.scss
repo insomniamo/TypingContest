@@ -4,8 +4,14 @@
     display: flex;
     flex-direction: column;
     align-items: center;
+    justify-content: center;
     padding-inline: $gap-container-mobile;
+
+    background-color: $big-stone;
+
     width: 100%;
+    height: 100vh;
+
     @media #{$desktop-width} {
         padding-inline: $gap-container-desktop;
     }

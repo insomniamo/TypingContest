@@ -1,39 +1,42 @@
 @import "../../base/styles/variables.scss";
 .letter {
-    font-size: 32px;
-    line-height: 32px;
-    position: relative;
-  
-    &__correct {
-      color: green;
-    }
-  
-    &__incorrect {
-      color: red;
-    }
+  font-size: 32px;
+  line-height: 32px;
+  position: relative;
+  color: $deep-sea-green;
+  text-shadow: 1px 0px 0px $big-stone, -1px 0px 0px $big-stone, 0px 1px 0px $big-stone, 1px 1px 0px $big-stone, -1px 1px 0px $big-stone;
 
-    &__caret{
-        position: absolute;
-        left: -2px;
-        bottom: 0;
-        width: 3.2px;
-        height: 110%;
-        background: $fuel-yellow;
-        border-radius: $roundness;
-        animation: caretFlashSmooth 1s ease infinite;
-        transform-origin: top left;
+  z-index: 1;
+  &__correct {
+    color: $java;
+  }
 
-        @keyframes caretFlashSmooth {
-            0% {
-              opacity: 1;
-            }
-            50% {
-              opacity: 0.2;
-            }
-            100% {
-              opacity: 1;
-            }
-        }
+  &__incorrect {
+    color: $punch;
+  }
+
+  &__caret{
+    position: absolute;
+    left: -2px;
+    bottom: 0;
+    width: 3.2px;
+    height: 110%;
+    background: $fuel-yellow;
+    border-radius: $roundness;
+    animation: caretFlashSmooth 1s ease infinite;
+    transform-origin: top left;
+
+    @keyframes caretFlashSmooth {
+      0% {
+        opacity: 1;
+      }
+      50% {
+        opacity: 0.2;
+      }
+      100% {
+        opacity: 1;
+      }
     }
+  }
 }
   
