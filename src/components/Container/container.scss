@@ -5,14 +5,21 @@
     flex-direction: column;
     align-items: center;
     justify-content: center;
+    margin-inline: auto;
+    
     padding-inline: $gap-container-mobile;
 
-    background-color: $big-stone;
+    max-width: $max-container-width;
 
-    width: 100%;
     height: 100vh;
 
+    @media #{$tablet-width} {
+        padding-inline: $gap-container-tablet;
+    }
+    @media #{$laptop-width} {
+        padding-inline: $gap-container-laptop;
+    }
     @media #{$desktop-width} {
-        padding-inline: $gap-container-desktop;
+        padding-inline: $gap-container-laptop;
     }
 }

@@ -1,0 +1,51 @@
+@import "../../base/styles/variables.scss";
+
+.header{
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+
+    &__row{
+        display: flex;
+        flex-direction: row;
+        justify-content: center;
+        align-items: center;
+
+        background-color: $firefly;
+
+        height: 100%;
+
+        border-radius: $roundness;
+    }
+
+    &__column{
+        display: flex;
+        flex-direction: column;
+        width: 100%;
+        gap: 32px;
+    }
+
+    &__menu{
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+        padding-inline: 10px;
+
+        @media #{$tablet-width} {
+            flex-direction: row;
+            gap: 0px;
+        }
+    }
+
+    &__devider{
+        display: none;
+
+        @media #{$tablet-width} {
+            content: "";
+            background-color: $big-stone;
+            height: 60%;
+            width: 6px;
+            border-radius: 4px;
+        }
+    }
+}

@@ -1,0 +1,100 @@
+@import "../../base/styles/variables.scss";
+.button {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 5px;
+
+    border: none;
+    border-radius: 0;
+    color: $deep-sea-green;
+    transition: background .125s, color .125s, opacity .125s;
+
+    &:hover {
+        cursor: pointer;
+    }
+
+    &__icon {
+        display: flex;
+        align-items: center;
+        height: 14px;
+        width: 14px;
+    }
+
+    &__text {
+        display: flex;
+        align-items: center;
+
+        min-height: 1em;
+        line-height: 1.2;
+    }
+
+    &--rounded {
+        padding: 12px 24px;
+        border-radius: $roundness;
+        background-color: $firefly;
+
+        &:hover {
+            background-color: $java;
+        }
+    }
+
+    &--simple {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
+        padding: 10.4px 5.72px;
+        background-color: transparent;
+
+        font-size: 13px;
+        line-height: 12px;
+
+        &:hover {
+            color: $java;
+        }
+
+        @media #{$tablet-width} {
+            padding: 10.4px 6.72px;
+            font-size: 11.4px;
+            line-height: 10.4px;
+        }
+
+        @media #{$laptop-width} {
+            padding: 11.2px 5.72px;
+            font-size: 12.2px;
+            line-height: 11.2px;
+        }
+
+        @media #{$desktop-width} {
+            padding: 12px;
+            font-size: 13px;
+            line-height: 12px;
+        }
+    }
+
+    &--modal{
+        display: flex;
+        flex-direction: row;
+        justify-content: center;
+        padding: 8px;
+        border-radius: $roundness;
+        background-color: $firefly;
+        color: $java;
+        font-size: 16px;
+        font-weight: 600;
+
+        &:hover {
+            background-color: $java;
+            color: $firefly;
+        }
+    }
+
+    &--active {
+        color: $fuel-yellow;
+    }
+
+    &--notvisible {
+        display: none;
+    }
+}

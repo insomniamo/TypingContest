@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import Container from "@components/Container/Container";
+import Header from "@components/Header/Header";
 import ReduxProvider from "@components/ReduxProvider/ReduxProvider";
 
 export const metadata: Metadata = {
@@ -16,7 +17,10 @@ export default function RootLayout({
     <html lang="en">
       <body>
         <ReduxProvider>
-          <Container>{children}</Container>
+          <Container>
+            <Header/>
+            {children}
+          </Container>
         </ReduxProvider>
       </body>
     </html>

@@ -9,6 +9,7 @@ $big-stone: #132237;
 $deep-sea-green: #0B4C6C;
 $java: #1CBAAC;
 $falu-red: #791717;
+$firefly: #0e1a29;
 
 //gradient
 $starship: #F2F452;
@@ -17,15 +18,18 @@ $green-yellow: #B4FD64;
 $conifer: #99E942;
 
 // breakpoints
-$mobile-width: "(max-width: 375px)";
-
-$desktop-width: "(min-width: 375px)";
+$mobile-width: "(max-width: 720px)";
+$tablet-width: "(min-width: 720px)";
+$laptop-width: "(min-width: 848px)";
+$desktop-width: "(min-width: 1105px)";
 
 // layout
-$max-container-width: 1920px;
-$gap-container-desktop: 64px;
+$max-container-width: 2048px;
 
-$gap-container-mobile: 16px;
+$gap-container-mobile: 20px;
+$gap-container-tablet: 40px;
+$gap-container-laptop: 60px;
+$gap-container-desktop: 80px;
 
 //radius
 $roundness: 8px;
