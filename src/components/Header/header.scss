@@ -41,6 +41,7 @@
         display: none;
 
         @media #{$tablet-width} {
+            display: block;
             content: "";
             background-color: $big-stone;
             height: 60%;
