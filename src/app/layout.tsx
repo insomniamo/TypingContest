@@ -6,6 +6,11 @@ import ReduxProvider from "@components/ReduxProvider/ReduxProvider";
 export const metadata: Metadata = {
   title: "TypingContest",
   description: "TypingContest",
+  icons: {
+    icon: "/favicon.ico",
+    apple: "/apple-touch-icon.png",
+    shortcut: "/favicon-32x32.png",
+  },
 };
 
 export default function RootLayout({

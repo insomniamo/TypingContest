@@ -12,6 +12,7 @@ import RestartIcon from "@icons/RestartIcon";
 import Words from "@components/Words/Words";
 import Loader from "@components/Loader/Loader";
 import Button from "@components/Button/Button";
+import CapsWarning from "@components/CapsWarning/CapsWarning";
 
 const TypingGame = () => {
   const dispatch = useDispatch<AppDispatch>();
@@ -35,7 +36,7 @@ const TypingGame = () => {
 
   return (
     <div className="typing-game">
-        
+      <CapsWarning/>
       <div className="typing-game__wrapper">
         <input
           type="text"
