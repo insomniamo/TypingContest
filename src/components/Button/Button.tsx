@@ -14,7 +14,7 @@ function Button({children, buttonText, onClickEvent, style = "simple"}: ButtonPr
     return (
         <button onClick = {onClickEvent} className={`button ${className}`}>
             {children && (
-                <div className='button__icon'>
+                <div className='button__icon-wrapper'>
                 {children}
             </div>
         )}

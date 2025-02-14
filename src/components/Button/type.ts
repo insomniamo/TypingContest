@@ -4,6 +4,7 @@ export const styleClasses = {
     active: 'button--active',
     notvisible: 'button--notvisible',
     modal: 'button--modal',
+    iconed: 'button--iconed',
 } as const;
   
 export type ButtonStyle = keyof typeof styleClasses;
