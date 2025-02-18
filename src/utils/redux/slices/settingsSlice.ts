@@ -2,6 +2,7 @@ import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
 interface SettingsState {
   punctuation: boolean;
+  uppercase: boolean;
   mode: "words" | "time" | "quotes";
   wordsAmount: number;
   secondsAmount: number;
@@ -10,6 +11,7 @@ interface SettingsState {
 
 const initialState: SettingsState = {
   punctuation: false,
+  uppercase: false,
   mode: "time",
   wordsAmount: 10,
   secondsAmount: 15,
@@ -20,6 +22,9 @@ const settingsSlice = createSlice({
   name: "settings",
   initialState,
   reducers: {
+    toggleUppercase: (state) => {
+      state.uppercase = !state.uppercase;
+    },
     togglePunctuation: (state) => {
       state.punctuation = !state.punctuation;
     },
@@ -38,5 +43,5 @@ const settingsSlice = createSlice({
   },
 });
 
-export const { togglePunctuation, setMode, setWordsAmount, setSecondsAmount, setQuoteLength } = settingsSlice.actions;
+export const { togglePunctuation, toggleUppercase, setMode, setWordsAmount, setSecondsAmount, setQuoteLength } = settingsSlice.actions;
 export default settingsSlice.reducer;

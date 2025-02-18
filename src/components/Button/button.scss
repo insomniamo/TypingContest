@@ -9,7 +9,8 @@
     border-radius: 0;
     color: $deep-sea-green;
     transition: background .125s, color .125s, opacity .125s;
-
+    white-space: nowrap;
+    
     &:hover {
         cursor: pointer;
     }

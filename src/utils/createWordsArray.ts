@@ -9,9 +9,15 @@ export type Word = {
   isActive: boolean;
 };
 
-export const createWordsArray = (referenceText: string): Word[] => {
-  const cleanedText = referenceText
-  .replace(/[.,!?;:(){}[\]<>«»“”'"—-]+/g, "").trim();
+export const createWordsArray = (referenceText: string, punctuation: boolean, uppercase: boolean): Word[] => {
+  let cleanedText = referenceText.replace(/—/g, "-").trim();
+
+  if (!punctuation) {
+    cleanedText = cleanedText.replace(/[.,!?;:(){}\[\]<>«»“”'"-]+/g, "");
+  }
+  if (!uppercase) {
+    cleanedText = cleanedText.toLowerCase();
+  }
 
   return cleanedText.split(/\s+/).map((word) => ({
     word: word.split("").map((letter) => ({

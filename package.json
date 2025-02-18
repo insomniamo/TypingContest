@@ -10,6 +10,7 @@
   },
   "dependencies": {
     "@reduxjs/toolkit": "^2.5.0",
+    "framer-motion": "^12.4.3",
     "next": "15.0.3",
     "normalize.css": "^8.0.1",
     "react": "^18.3.1",

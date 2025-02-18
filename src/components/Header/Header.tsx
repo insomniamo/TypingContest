@@ -2,13 +2,16 @@
 import React, { useState, useEffect } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 import { RootState } from '@utils/redux/store'
-import { togglePunctuation, setMode, setWordsAmount, setSecondsAmount, setQuoteLength } from '@utils/redux/slices/settingsSlice'
+import { togglePunctuation, toggleUppercase, setMode, setWordsAmount, setSecondsAmount, setQuoteLength } from '@utils/redux/slices/settingsSlice'
+
+import { motion } from 'framer-motion'
 
 import SettingsIcon from '@icons/SettingsIcon'
 import WordsIcon from '@icons/WordsIcon'
 import TimeIcon from '@icons/TimeIcon'
 import QuoteIcon from '@icons/QuoteIcon'
 import PunctuationIcon from '@icons/PunctuationIcon'
+import UppercaseIcon from '@icons/UppercaseIcon'
 
 import Button from '@components/Button/Button'
 import Modal from '@components/Modal/Modal'
@@ -16,7 +19,7 @@ import "./header.scss"
 
 const Header: React.FC = () => {
   const dispatch = useDispatch()
-  const { punctuation, mode, wordsAmount, secondsAmount, quoteLength } = useSelector((state: RootState) => state.settings)
+  const { punctuation, uppercase, mode, wordsAmount, secondsAmount, quoteLength } = useSelector((state: RootState) => state.settings)
 
   const [isModalOpened, setModalOpened] = useState<boolean>(false)
   const [isMobile, setIsMobile] = useState<boolean>(typeof window !== 'undefined' && window.innerWidth <= 720)
@@ -51,6 +54,15 @@ const Header: React.FC = () => {
     <>
       <div className='header__menu'>
         <Button
+          buttonText='Заглавные'
+          style={isModalOpened 
+            ? uppercase ? ["modal", "active"] : ["modal"] 
+            : uppercase ? ["simple", "active"] : ["simple"]}
+          onClickEvent={() => dispatch(toggleUppercase())}
+        >
+          {!isModalOpened && <UppercaseIcon/>}
+        </Button>
+        <Button
           buttonText='Пунктуация'
           style={isModalOpened 
             ? punctuation ? ["modal", "active"] : ["modal"] 
@@ -76,7 +88,15 @@ const Header: React.FC = () => {
         ))}
       </div>
       <div className='header__devider' />
-      <div className='header__menu'>
+      
+      <motion.div
+        className='header__menu'
+        key={mode}
+        initial={{ opacity: 0, translateY: -1, scale: 0.95 }}
+        animate={{ opacity: 1, translateY: 0, scale: 1 }}
+        exit={{ opacity: 0, translateY: 1, scale: 0.95 }}
+        transition={{ duration: 0.2, ease: "easeInOut" }}
+      >
         {thirdBlockOptions.map((text, index) => {
           const isActive =
             (mode === 'words' && wordsAmount === Number(text)) ||
@@ -98,7 +118,7 @@ const Header: React.FC = () => {
             />
           )
         })}
-      </div>
+      </motion.div>
     </>
   )
 

@@ -1,6 +1,6 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { fetchText } from "@utils/redux/api/textAPI";
-import { createWordsArray, Word } from "@utils/createWordsArray";
+import { Word } from "@utils/createWordsArray";
 
 interface TypingGameState {
   referenceText: string;
@@ -29,16 +29,16 @@ const typingGameSlice = createSlice({
     setInput(state, action: PayloadAction<string>) {
       let input = action.payload;
       let errorCount = state.errorCount;
-    
+
       if (input.length > state.currentInput.length) {
         input = input.replace(/\s{2,}(?=\S)/g, " ");
       }
-    
+
       input = input.replace(/^\s+/, "");
-    
+
       let spacesCount = 0;
       let lastWasSpace = false;
-    
+
       for (let i = 0; i < input.length; i++) {
         if (input[i] === " ") {
           if (!lastWasSpace) {
@@ -49,12 +49,12 @@ const typingGameSlice = createSlice({
           lastWasSpace = false;
         }
       }
-    
+
       const words = input.trim().split(/\s+/);
       state.wordsArray = state.wordsArray.map((wordObj, wordIndex) => {
         const inputWord = words[wordIndex] || "";
         const isActive = wordIndex === spacesCount;
-    
+
         return {
           ...wordObj,
           isActive,
@@ -70,20 +70,19 @@ const typingGameSlice = createSlice({
           }),
         };
       });
-    
+
       state.currentInput = input;
       state.spacesCount = spacesCount;
       state.errorCount = errorCount;
-    }
-    ,
+    },
     resetGame(state) {
       state.currentInput = "";
       state.errorCount = 0;
       state.spacesCount = 0;
-      state.wordsArray = createWordsArray(state.referenceText).map((wordObj, index) => ({
-        ...wordObj,
-        isActive: index === 0,
-      }));
+      state.wordsArray = [];
+    },
+    setWordsArray(state, action: PayloadAction<Word[]>) {
+      state.wordsArray = action.payload;
     },
   },
   extraReducers: (builder) => {
@@ -94,10 +93,6 @@ const typingGameSlice = createSlice({
       })
       .addCase(fetchText.fulfilled, (state, action: PayloadAction<string>) => {
         state.referenceText = action.payload;
-        state.wordsArray = createWordsArray(action.payload).map((wordObj, index) => ({
-          ...wordObj,
-          isActive: index === 0,
-        }));
         state.loading = false;
       })
       .addCase(fetchText.rejected, (state, action) => {
@@ -107,5 +102,5 @@ const typingGameSlice = createSlice({
   },
 });
 
-export const { setInput, resetGame } = typingGameSlice.actions;
+export const { setInput, resetGame, setWordsArray } = typingGameSlice.actions;
 export default typingGameSlice.reducer;
