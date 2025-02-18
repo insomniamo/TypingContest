@@ -1,5 +1,5 @@
 "use client";
-import React, { useEffect } from "react";
+import React, { useEffect, useRef } from "react";
 import "./typinggame.scss";
 
 import { useDispatch, useSelector } from "react-redux";
@@ -18,7 +18,8 @@ import CapsWarning from "@components/CapsWarning/CapsWarning";
 const TypingGame = () => {
   const punctuation = useSelector((state: RootState) => state.settings.punctuation);
   const uppercase = useSelector((state: RootState) => state.settings.uppercase);
-  
+  const inputRef = useRef<HTMLInputElement>(null);
+
   const dispatch = useDispatch<AppDispatch>();
   const { wordsArray, currentInput, loading, error, referenceText } = useSelector(
     (state: RootState) => state.typingGame
@@ -35,6 +36,12 @@ const TypingGame = () => {
     }
   }, [referenceText]);
   
+  useEffect(() => {
+    if (inputRef.current) {
+      inputRef.current.focus();
+    }
+  }, []);
+
   const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     dispatch(setInput(event.target.value));
   };
@@ -55,6 +62,7 @@ const TypingGame = () => {
           onChange={handleInputChange}
           className="typing-game__input"
           autoFocus
+          ref={inputRef}
         />
         {loading ? <Loader /> : <Words wordsArray={wordsArray} />}
         {error && <p className="error">Ошибка: {error}</p>}

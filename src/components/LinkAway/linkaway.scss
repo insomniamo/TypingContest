@@ -1,0 +1,25 @@
+@import "../../base/styles/variables.scss";
+
+.link{
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    gap: 5px;
+
+    padding: 3px 6px;
+    text-decoration: none;
+    color: $deep-sea-green;
+
+    &:hover {
+        color: $java;
+    }
+
+    &__icon{
+        display: flex;
+        align-items: center;
+
+        height: 15px;
+        width: 15px;
+    }
+}
