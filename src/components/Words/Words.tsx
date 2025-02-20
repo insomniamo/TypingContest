@@ -17,9 +17,10 @@ type WordType = {
 
 type WordsProps = {
   wordsArray: WordType[];
+  isFocused: boolean;
 };
 
-const Words: React.FC<WordsProps> = ({ wordsArray }) => {
+const Words: React.FC<WordsProps> = ({ wordsArray, isFocused }) => {
   const containerRef = useRef<HTMLDivElement>(null);
   const [lines, setLines] = useState<number[]>([]);
   const [errorWords, setErrorWords] = useState<Set<number>>(new Set()); // Состояние для ошибок
@@ -100,7 +101,7 @@ const Words: React.FC<WordsProps> = ({ wordsArray }) => {
     : 0;
 
   return (
-    <div className="words">
+    <div className={`words ${isFocused ? "" : "words--blured"}`}>
       <div className="words__arr" ref={containerRef} style={{ transform: `translateY(${translateY}px)` }}>
         {wordsArray.map((wordObj, index) => (
           <Word

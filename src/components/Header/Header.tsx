@@ -55,6 +55,7 @@ const Header: React.FC = () => {
       <div className='header__menu'>
         <Button
           buttonText='Заглавные'
+          onMouseDown={(e) => e.preventDefault()}
           style={isModalOpened 
             ? uppercase ? ["modal", "active"] : ["modal"] 
             : uppercase ? ["simple", "active"] : ["simple"]}
@@ -64,6 +65,7 @@ const Header: React.FC = () => {
         </Button>
         <Button
           buttonText='Пунктуация'
+          onMouseDown={(e) => e.preventDefault()}
           style={isModalOpened 
             ? punctuation ? ["modal", "active"] : ["modal"] 
             : punctuation ? ["simple", "active"] : ["simple"]}
@@ -78,6 +80,7 @@ const Header: React.FC = () => {
           <Button
             key={type}
             buttonText={label}
+            onMouseDown={(e) => e.preventDefault()}
             style={isModalOpened 
               ? mode === type ? ["modal", "active"] : ["modal"] 
               : mode === type ? ["simple", "active"] : ["simple"]}
@@ -107,6 +110,7 @@ const Header: React.FC = () => {
             <Button
               key={text}
               buttonText={text}
+              onMouseDown={(e) => e.preventDefault()}
               style={isModalOpened
                 ? isActive ? ["modal", "active"] : ["modal"]
                 : isActive ? ["simple", "active"] : ["simple"]}
@@ -126,7 +130,12 @@ const Header: React.FC = () => {
     <header className='header'>
       {isMobile ? (
         <>
-          <Button buttonText='Меню настроек' style={["rounded"]} onClickEvent={() => setModalOpened(prev => !prev)}>
+          <Button 
+            buttonText='Меню настроек' 
+            onMouseDown={(e) => e.preventDefault()}
+            style={["rounded"]} 
+            onClickEvent={() => setModalOpened(prev => !prev)}
+          >
             <SettingsIcon />
           </Button>
           <Modal isOpen={isModalOpened} onClose={() => setModalOpened(false)}>

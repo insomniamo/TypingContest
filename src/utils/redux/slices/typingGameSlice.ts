@@ -81,6 +81,11 @@ const typingGameSlice = createSlice({
       state.spacesCount = 0;
       state.wordsArray = [];
     },
+    changeSettings(state) {
+      state.currentInput = "";
+      state.errorCount = 0;
+      state.spacesCount = 0;
+    },
     setWordsArray(state, action: PayloadAction<Word[]>) {
       state.wordsArray = action.payload;
     },
@@ -102,5 +107,5 @@ const typingGameSlice = createSlice({
   },
 });
 
-export const { setInput, resetGame, setWordsArray } = typingGameSlice.actions;
+export const { setInput, resetGame, setWordsArray, changeSettings } = typingGameSlice.actions;
 export default typingGameSlice.reducer;

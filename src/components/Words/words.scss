@@ -2,14 +2,20 @@
     position: relative;
     height: 144px;
     overflow: hidden;
-    // width: 100%;
-
+    transition: 0.25s;
+    
     &__arr{
         display: flex;
         flex-direction: row;
         flex-wrap: wrap;
         position: relative;
         transform: translateY(0);
+    }
+
+    &--blured{
+        opacity: .25;
+        filter: blur(4px);
+        -webkit-filter: blur(4px);
     }
 }
   
