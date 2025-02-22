@@ -24,5 +24,10 @@
         opacity: 0;
     
         user-select: none;
+        
+        &--cursorhidden{
+            cursor: none;
+        }
     }
+
 }

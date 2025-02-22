@@ -10,6 +10,7 @@ interface TypingGameState {
   errorCount: number;
   loading: boolean;
   error: string | null;
+  testFocused: boolean;
 }
 
 const initialState: TypingGameState = {
@@ -20,6 +21,7 @@ const initialState: TypingGameState = {
   errorCount: 0,
   loading: false,
   error: null,
+  testFocused: false,
 };
 
 const typingGameSlice = createSlice({
@@ -38,6 +40,7 @@ const typingGameSlice = createSlice({
 
       let spacesCount = 0;
       let lastWasSpace = false;
+      state.testFocused = true;
 
       for (let i = 0; i < input.length; i++) {
         if (input[i] === " ") {
@@ -89,6 +92,9 @@ const typingGameSlice = createSlice({
     setWordsArray(state, action: PayloadAction<Word[]>) {
       state.wordsArray = action.payload;
     },
+    setTestFocused(state, action: PayloadAction<boolean>) {
+      state.testFocused = action.payload;
+    },
   },
   extraReducers: (builder) => {
     builder
@@ -107,5 +113,5 @@ const typingGameSlice = createSlice({
   },
 });
 
-export const { setInput, resetGame, setWordsArray, changeSettings } = typingGameSlice.actions;
+export const { setInput, resetGame, setWordsArray, changeSettings, setTestFocused } = typingGameSlice.actions;
 export default typingGameSlice.reducer;

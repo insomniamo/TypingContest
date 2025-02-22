@@ -19,10 +19,11 @@ import "./header.scss"
 
 const Header: React.FC = () => {
   const dispatch = useDispatch()
-  const { punctuation, uppercase, mode, wordsAmount, secondsAmount, quoteLength } = useSelector((state: RootState) => state.settings)
+  const { punctuation, uppercase, mode, wordsAmount, secondsAmount, quoteLength } = useSelector((state: RootState) => state.settings);
+  const { testFocused } = useSelector((state: RootState) => state.typingGame);
 
-  const [isModalOpened, setModalOpened] = useState<boolean>(false)
-  const [isMobile, setIsMobile] = useState<boolean>(typeof window !== 'undefined' && window.innerWidth <= 720)
+  const [isModalOpened, setModalOpened] = useState<boolean>(false);
+  const [isMobile, setIsMobile] = useState<boolean>(typeof window !== 'undefined' && window.innerWidth <= 720);
 
   useEffect(() => {
     function handleResize() {
@@ -127,7 +128,13 @@ const Header: React.FC = () => {
   )
 
   return (
-    <header className='header'>
+    <motion.header
+    className="header"
+    initial={{ opacity: 1 }}
+    animate={testFocused ? { opacity: 0 } : { opacity: 1 }}
+    exit={{ opacity: 0 }}
+    transition={{ duration: 0.3, ease: "easeInOut" }}
+    >
       {isMobile ? (
         <>
           <Button 
@@ -145,7 +152,7 @@ const Header: React.FC = () => {
       ) : (
         <div className='header__row'>{menuContent}</div>
       )}
-    </header>
+    </motion.header>
   )
 }
 

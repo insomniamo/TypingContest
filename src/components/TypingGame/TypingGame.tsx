@@ -6,7 +6,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { RootState, AppDispatch } from "@utils/redux/store";
 import { fetchText } from "@utils/redux/api/textAPI";
 import { resetTextShift } from "@utils/redux/slices/textShiftSlice";
-import { setInput, resetGame, setWordsArray, changeSettings } from "@utils/redux/slices/typingGameSlice";
+import { setInput, resetGame, setWordsArray, changeSettings, setTestFocused } from "@utils/redux/slices/typingGameSlice";
 import { createWordsArray } from "@utils/createWordsArray";
 
 import RestartIcon from "@icons/RestartIcon";
@@ -17,14 +17,17 @@ import CapsWarning from "@components/CapsWarning/CapsWarning";
 import FocusWarning from "@components/FocusWarning/FocusWarning";
 
 const TypingGame = () => {
-  const punctuation = useSelector((state: RootState) => state.settings.punctuation);
-  const uppercase = useSelector((state: RootState) => state.settings.uppercase);
-  
+
   const inputRef = useRef<HTMLInputElement>(null);
   const [isFocused, setIsFocused] = useState(true);
 
   const dispatch = useDispatch<AppDispatch>();
-  const { wordsArray, currentInput, loading, error, referenceText } = useSelector(
+
+  const { punctuation, uppercase } = useSelector(
+    (state: RootState) => state.settings
+  );
+
+  const { wordsArray, currentInput, loading, error, referenceText, testFocused } = useSelector(
     (state: RootState) => state.typingGame
   );
 
@@ -63,6 +66,7 @@ const TypingGame = () => {
       document.removeEventListener("keydown", handleKeyPress);
     };
   }, [isFocused]);
+  
   useEffect(() => {
     if (inputRef.current) {
       inputRef.current.focus();
@@ -80,6 +84,31 @@ const TypingGame = () => {
     dispatch(resetTextShift());
   };
   
+  useEffect(() => {
+    if (testFocused) {
+      document.body.classList.add("body-hidden-cursor");
+    } else {
+      document.body.classList.remove("body-hidden-cursor");
+    }
+
+    return () => {
+      document.body.classList.remove("body-hidden-cursor");
+    };
+  }, [testFocused]);
+
+  useEffect(() => {
+    const handleMouseMove = () => {
+      dispatch(setTestFocused(false));
+    };
+
+    window.addEventListener("mousemove", handleMouseMove);
+
+    return () => {
+      window.removeEventListener("mousemove", handleMouseMove);
+    };
+  }, [dispatch]);
+
+
   const handleClickAnywhere = () => {
     if (inputRef.current && !isFocused) {
       inputRef.current.focus();
@@ -94,7 +123,7 @@ const TypingGame = () => {
           type="text"
           value={currentInput}
           onChange={handleInputChange}
-          className="typing-game__input"
+          className={`typing-game__input ${testFocused ? "typing-game__input--cursorhidden" : ""}`}
           autoFocus
           ref={inputRef}
         />
