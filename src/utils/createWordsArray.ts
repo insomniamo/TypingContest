@@ -1,4 +1,3 @@
-// utils/createWordsArray.ts
 export type Letter = {
   letter: string;
   isCorrect: boolean | null;
@@ -19,11 +18,12 @@ export const createWordsArray = (referenceText: string, punctuation: boolean, up
     cleanedText = cleanedText.toLowerCase();
   }
 
-  return cleanedText.split(/\s+/).map((word) => ({
+  return cleanedText.split(/\s+/).map((word, index) => ({
     word: word.split("").map((letter) => ({
       letter,
       isCorrect: null,
     })),
-    isActive: false,
+    isActive: index === 0,
   }));
 };
+

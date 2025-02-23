@@ -19,5 +19,29 @@
     background-color: $punch;
     border-radius: 2px;
   }
+
+  &__caret{
+    position: absolute;
+    left: 0px;
+    bottom: 0;
+    width: 3.2px;
+    height: 110%;
+    background: $fuel-yellow;
+    border-radius: $roundness;
+    animation: caretFlashSmooth 1s ease infinite;
+    transform-origin: top left;
+
+    @keyframes caretFlashSmooth {
+      0% {
+        opacity: 1;
+      }
+      50% {
+        opacity: 0.2;
+      }
+      100% {
+        opacity: 1;
+      }
+    }
+  }
 }
   

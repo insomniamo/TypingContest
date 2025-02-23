@@ -16,11 +16,19 @@ type WordProps = {
   isError: boolean;
 };
 
+const LETTER_WIDTH = 19.21;
+
 const Word: React.FC<WordProps> = ({ wordObj, currentLetterIndex, isError }) => {
   return (
     <div className={`word ${wordObj.isActive ? "active" : ""} ${isError ? "word__error" : ""}`}>
+      {wordObj.isActive && (
+        <span
+          className="word__caret"
+          style={{ left: `${currentLetterIndex * LETTER_WIDTH - 1.5}px` }}
+        />
+      )}
       {wordObj.word.map((charObj, index) => (
-        <Letter key={index} letter={charObj.letter} isCorrect={charObj.isCorrect} isActive={index === currentLetterIndex} />
+        <Letter key={index} letter={charObj.letter} isCorrect={charObj.isCorrect} />
       ))}
     </div>
   );
