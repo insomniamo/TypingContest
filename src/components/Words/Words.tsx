@@ -23,12 +23,15 @@ type WordsProps = {
 const Words: React.FC<WordsProps> = ({ wordsArray, isFocused }) => {
   const containerRef = useRef<HTMLDivElement>(null);
   const [lines, setLines] = useState<number[]>([]);
-  const [errorWords, setErrorWords] = useState<Set<number>>(new Set()); // Состояние для ошибок
+  const [errorWords, setErrorWords] = useState<Set<number>>(new Set());
   
-  const spacesCount = useSelector((state: RootState) => state.typingGame.spacesCount);
-  const currentInput = useSelector((state: RootState) => state.typingGame.currentInput);
-  const translateY = useSelector((state: RootState) => state.textShift.translateY);
-  const currentLineIndex = useSelector((state: RootState) => state.textShift.currentLineIndex);
+  const { spacesCount, currentInput } = useSelector(
+    (state: RootState) => state.typingGame
+  );
+  const { translateY, currentLineIndex } = useSelector(
+    (state: RootState) => state.textShift
+  );
+
   const dispatch = useDispatch();
 
   const calculateLines = () => {

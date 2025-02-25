@@ -1,4 +1,5 @@
 @import "../../base/styles/variables.scss";
+
 .letter {
   font-size: 32px;
   line-height: 32px;
@@ -6,12 +7,17 @@
   text-shadow: 1px 0px 0px $big-stone, -1px 0px 0px $big-stone, 0px 1px 0px $big-stone, 1px 1px 0px $big-stone, -1px 1px 0px $big-stone;
 
   z-index: 1;
-  &__correct {
+
+  &--correct {
     color: $java;
   }
 
-  &__incorrect {
+  &--incorrect {
     color: $punch;
+  }
+
+  &--extra {
+    color: $falu-red;
   }
 }
   

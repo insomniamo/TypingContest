@@ -5,6 +5,7 @@ import "./word.scss";
 type LetterType = {
   letter: string;
   isCorrect: boolean | null;
+  isExtra?: boolean;
 };
 
 type WordProps = {
@@ -28,7 +29,12 @@ const Word: React.FC<WordProps> = ({ wordObj, currentLetterIndex, isError }) => 
         />
       )}
       {wordObj.word.map((charObj, index) => (
-        <Letter key={index} letter={charObj.letter} isCorrect={charObj.isCorrect} />
+        <Letter
+          key={index}
+          letter={charObj.letter}
+          isCorrect={charObj.isCorrect}
+          isExtra={charObj.isExtra}
+        />
       ))}
     </div>
   );

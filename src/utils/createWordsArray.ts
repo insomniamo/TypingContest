@@ -1,6 +1,7 @@
 export type Letter = {
   letter: string;
   isCorrect: boolean | null;
+  isExtra: boolean;
 };
 
 export type Word = {
@@ -22,6 +23,7 @@ export const createWordsArray = (referenceText: string, punctuation: boolean, up
     word: word.split("").map((letter) => ({
       letter,
       isCorrect: null,
+      isExtra: false,
     })),
     isActive: index === 0,
   }));

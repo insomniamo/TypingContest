@@ -29,49 +29,47 @@ const typingGameSlice = createSlice({
   initialState,
   reducers: {
     setInput(state, action: PayloadAction<string>) {
-      let input = action.payload;
+      let input = action.payload.trimStart();
       let errorCount = state.errorCount;
 
-      if (input.length > state.currentInput.length) {
-        input = input.replace(/\s{2,}(?=\S)/g, " ");
-      }
+      // Убираем повторяющиеся пробелы и считаем их количество
+      input = input.replace(/\s{2,}/g, " ");
+      const spacesCount = (input.match(/\s/g) || []).length;
 
-      input = input.replace(/^\s+/, "");
-
-      let spacesCount = 0;
-      let lastWasSpace = false;
       state.testFocused = true;
 
-      for (let i = 0; i < input.length; i++) {
-        if (input[i] === " ") {
-          if (!lastWasSpace) {
-            spacesCount++;
-          }
-          lastWasSpace = true;
-        } else {
-          lastWasSpace = false;
-        }
-      }
+      const words = input.split(" ");
 
-      const words = input.trim().split(/\s+/);
       state.wordsArray = state.wordsArray.map((wordObj, wordIndex) => {
         const inputWord = words[wordIndex] || "";
         const isActive = wordIndex === spacesCount;
+        const newWord = [...wordObj.word];
 
-        return {
-          ...wordObj,
-          isActive,
-          word: wordObj.word.map((charObj, charIndex) => {
-            if (charIndex < inputWord.length) {
-              const isCorrect = inputWord[charIndex] === charObj.letter;
-              if (!isCorrect && charObj.isCorrect !== false) {
-                errorCount++;
-              }
-              return { ...charObj, isCorrect };
-            }
-            return { ...charObj, isCorrect: null };
-          }),
-        };
+        for (let i = 0; i < inputWord.length; i++) {
+          if (i < newWord.length) {
+            const isCorrect = inputWord[i] === newWord[i].letter && !newWord[i].isExtra;
+            if (!isCorrect && newWord[i].isCorrect !== false) errorCount++;
+            newWord[i] = { ...newWord[i], isCorrect };
+          } else {
+            // Лишний символ всегда помечается как isExtra и isCorrect: false
+            newWord.push({ letter: inputWord[i], isCorrect: false, isExtra: true });
+            errorCount++; // Учитываем ошибку за лишний символ
+          }
+        }        
+
+        // Удаляем все `isExtra` символы при стирании
+        while (newWord.length > inputWord.length && newWord[newWord.length - 1].isExtra) {
+          newWord.pop();
+        }
+
+        // Если стерли символ исходного слова, устанавливаем `isCorrect: null`
+        for (let i = inputWord.length; i < newWord.length; i++) {
+          if (!newWord[i].isExtra) {
+            newWord[i] = { ...newWord[i], isCorrect: null };
+          }
+        }
+
+        return { ...wordObj, isActive, word: newWord };
       });
 
       state.currentInput = input;
@@ -79,10 +77,7 @@ const typingGameSlice = createSlice({
       state.errorCount = errorCount;
     },
     resetGame(state) {
-      state.currentInput = "";
-      state.errorCount = 0;
-      state.spacesCount = 0;
-      state.wordsArray = [];
+      Object.assign(state, initialState);
     },
     changeSettings(state) {
       state.currentInput = "";
