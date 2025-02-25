@@ -77,11 +77,10 @@ const TypingGame = () => {
   const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     dispatch(setInput(event.target.value));
   };
-
   const handleRefreshText = () => {
-    dispatch(fetchText());
     dispatch(resetGame());
     dispatch(resetTextShift());
+    dispatch(fetchText());
   };
   
   useEffect(() => {
@@ -108,17 +107,16 @@ const TypingGame = () => {
     };
   }, [dispatch]);
 
-
-  const handleClickAnywhere = () => {
-    if (inputRef.current && !isFocused) {
+  const handleBackgroundClick = (event: React.MouseEvent<HTMLDivElement>) => {
+    if (event.currentTarget === event.target && inputRef.current) {
       inputRef.current.focus();
     }
   };
-
+  
   return (
-    <div className="typing-game" onClick={handleClickAnywhere}>
+    <div className="typing-game">
       <CapsWarning />
-      <div className="typing-game__wrapper">
+      <div className="typing-game__wrapper" onMouseDown={handleBackgroundClick}>
         <input
           type="text"
           value={currentInput}
@@ -130,10 +128,9 @@ const TypingGame = () => {
         {!isFocused && <FocusWarning/>}
         {loading ? <Loader /> : <Words wordsArray={wordsArray} isFocused={isFocused}/>}
         {error && <p className="error">Ошибка: {error}</p>}
-
       </div>
 
-      <Button style={["iconed"]} onClickEvent={handleRefreshText}>
+      <Button style={["iconed"]} onClickEvent={handleRefreshText} onMouseDown={(e) => e.preventDefault()}>
         <RestartIcon />
       </Button>
     </div>
