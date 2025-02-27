@@ -15,6 +15,7 @@ import Loader from "@components/Loader/Loader";
 import Button from "@components/Button/Button";
 import CapsWarning from "@components/CapsWarning/CapsWarning";
 import FocusWarning from "@components/FocusWarning/FocusWarning";
+import ProgressTracker from "@components/ProgressTracker/ProgressTracker";
 
 const TypingGame = () => {
 
@@ -23,18 +24,20 @@ const TypingGame = () => {
 
   const dispatch = useDispatch<AppDispatch>();
 
-  const { punctuation, uppercase } = useSelector(
+  const { punctuation, uppercase, mode, secondsAmount, quoteLength } = useSelector(
     (state: RootState) => state.settings
   );
 
-  const { wordsArray, currentInput, loading, error, referenceText, testFocused } = useSelector(
+  const { wordsArray, currentInput, loading, error, referenceText, testFocused, gameActive } = useSelector(
     (state: RootState) => state.typingGame
   );
 
+  // Загрузка текста
   useEffect(() => {
     dispatch(fetchText());
-  }, [dispatch, punctuation, uppercase]);
+  }, [dispatch, punctuation, uppercase, mode, secondsAmount, quoteLength]);
 
+  // Обновление состояния игры при получении нового текста
   useEffect(() => {
     if (referenceText) {
       const words = createWordsArray(referenceText, punctuation, uppercase);
@@ -67,6 +70,7 @@ const TypingGame = () => {
     };
   }, [isFocused]);
   
+  // Фокусировка на инпуте при инициалзации
   useEffect(() => {
     if (inputRef.current) {
       inputRef.current.focus();
@@ -74,15 +78,27 @@ const TypingGame = () => {
     }
   }, []);
 
+  // Включение инпута после перезагрузки теста
+  useEffect(() => {
+    if (gameActive === "standby" && inputRef.current) {
+      inputRef.current.disabled = false;
+      inputRef.current.focus();
+      setIsFocused(true);
+    }
+  }, [gameActive]);
+  
   const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     dispatch(setInput(event.target.value));
   };
+
+  // Загрузить новый текст и сбросить состояние игры
   const handleRefreshText = () => {
     dispatch(resetGame());
     dispatch(resetTextShift());
     dispatch(fetchText());
   };
   
+  // Скрыть курсор при вводе текста
   useEffect(() => {
     if (testFocused) {
       document.body.classList.add("body-hidden-cursor");
@@ -95,6 +111,7 @@ const TypingGame = () => {
     };
   }, [testFocused]);
 
+  // Отобразить курсор при движении мыши
   useEffect(() => {
     const handleMouseMove = () => {
       dispatch(setTestFocused(false));
@@ -113,9 +130,20 @@ const TypingGame = () => {
     }
   };
   
+  // Выключить инпут при завершении теста
+  useEffect(() => {
+    if (inputRef.current) {
+      inputRef.current.disabled = gameActive === "false";
+    }
+  }, [gameActive]);
+  
+
   return (
     <div className="typing-game">
       <CapsWarning />
+      <div className="typing-game__tracker">
+        <ProgressTracker/>
+      </div>
       <div className="typing-game__wrapper" onMouseDown={handleBackgroundClick}>
         <input
           type="text"
@@ -125,7 +153,7 @@ const TypingGame = () => {
           autoFocus
           ref={inputRef}
         />
-        {!isFocused && <FocusWarning/>}
+        {((gameActive === "true" || gameActive === "standby") && !isFocused) && <FocusWarning/>}
         {loading ? <Loader /> : <Words wordsArray={wordsArray} isFocused={isFocused}/>}
         {error && <p className="error">Ошибка: {error}</p>}
       </div>

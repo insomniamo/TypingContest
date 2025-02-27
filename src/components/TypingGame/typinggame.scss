@@ -29,5 +29,13 @@
             cursor: none;
         }
     }
+    
+    &__tracker{
+        display: flex;
+        flex-direction: row;
+        justify-content: flex-start;
 
+        width: 100%;
+        padding-inline: 9.6px;
+    }
 }
