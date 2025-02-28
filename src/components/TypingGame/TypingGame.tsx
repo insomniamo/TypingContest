@@ -15,7 +15,9 @@ import Loader from "@components/Loader/Loader";
 import Button from "@components/Button/Button";
 import CapsWarning from "@components/CapsWarning/CapsWarning";
 import FocusWarning from "@components/FocusWarning/FocusWarning";
-import ProgressTracker from "@components/ProgressTracker/ProgressTracker";
+import TimeTracker from "@components/TimeTracker/TimeTracker";
+import WordsTracker from "@components/WordsTracker/WordsTracker";
+import ShowResults from "@components/ShowResults/ShowResults";
 
 const TypingGame = () => {
 
@@ -24,7 +26,7 @@ const TypingGame = () => {
 
   const dispatch = useDispatch<AppDispatch>();
 
-  const { punctuation, uppercase, mode, secondsAmount, quoteLength } = useSelector(
+  const { punctuation, uppercase, mode, secondsAmount, quoteLength, wordsAmount } = useSelector(
     (state: RootState) => state.settings
   );
 
@@ -34,13 +36,17 @@ const TypingGame = () => {
 
   // Загрузка текста
   useEffect(() => {
-    dispatch(fetchText());
-  }, [dispatch, punctuation, uppercase, mode, secondsAmount, quoteLength]);
+    if(mode === "quotes"){
+      dispatch(fetchText({quoteLength}));
+    } else {
+      dispatch(fetchText({}));
+    }
+  }, [dispatch, punctuation, uppercase, mode, secondsAmount, quoteLength, wordsAmount]);
 
   // Обновление состояния игры при получении нового текста
   useEffect(() => {
     if (referenceText) {
-      const words = createWordsArray(referenceText, punctuation, uppercase);
+      const words = createWordsArray(referenceText, punctuation, uppercase, mode, wordsAmount);
       dispatch(setWordsArray(words));
       dispatch(resetTextShift());
       dispatch(changeSettings());
@@ -95,7 +101,11 @@ const TypingGame = () => {
   const handleRefreshText = () => {
     dispatch(resetGame());
     dispatch(resetTextShift());
-    dispatch(fetchText());
+    if(mode === "quotes"){
+      dispatch(fetchText({quoteLength}));
+    } else {
+      dispatch(fetchText({}));
+    }
   };
   
   // Скрыть курсор при вводе текста
@@ -142,7 +152,7 @@ const TypingGame = () => {
     <div className="typing-game">
       <CapsWarning />
       <div className="typing-game__tracker">
-        <ProgressTracker/>
+        {mode === "time" ? <TimeTracker/> : <WordsTracker/>}
       </div>
       <div className="typing-game__wrapper" onMouseDown={handleBackgroundClick}>
         <input
@@ -153,7 +163,8 @@ const TypingGame = () => {
           autoFocus
           ref={inputRef}
         />
-        {((gameActive === "true" || gameActive === "standby") && !isFocused) && <FocusWarning/>}
+        {((gameActive === "true" || gameActive === "standby") && !loading && !isFocused) && <FocusWarning/>}
+        {gameActive === "false" && !loading && <ShowResults />}
         {loading ? <Loader /> : <Words wordsArray={wordsArray} isFocused={isFocused}/>}
         {error && <p className="error">Ошибка: {error}</p>}
       </div>

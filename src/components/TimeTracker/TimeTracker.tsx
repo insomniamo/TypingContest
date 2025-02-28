@@ -3,9 +3,9 @@ import { useSelector, useDispatch } from 'react-redux';
 import { RootState } from '@utils/redux/store';
 import { setGameActive, setTestFocused } from '@utils/redux/slices/typingGameSlice';
 import { motion } from 'framer-motion'
-import './progresstracker.scss';
+import './timetracker.scss';
 
-function ProgressTracker() {
+function TimeTracker() {
     const dispatch = useDispatch();
     const { gameActive, testFocused } = useSelector((state: RootState) => state.typingGame);
     const { mode, secondsAmount } = useSelector((state: RootState) => state.settings);
@@ -25,11 +25,11 @@ function ProgressTracker() {
 
     // Завершить игру по окончанию таймера
     useEffect(() => {
-        if (timeLeft === 0 && gameActive === "true") {
+        if (timeLeft === 0 && gameActive === "true" && mode === "time") {
             dispatch(setGameActive("false"));
             dispatch(setTestFocused(false));
         }
-    }, [timeLeft, gameActive, dispatch, secondsAmount]);
+    }, [timeLeft, gameActive, dispatch, secondsAmount, mode]);
 
     // Обновить таймер при переходе игры в standby
     useEffect(() => {
@@ -54,4 +54,4 @@ function ProgressTracker() {
     );
 }
 
-export default ProgressTracker;
+export default TimeTracker;

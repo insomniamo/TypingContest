@@ -2,9 +2,10 @@ import { createAsyncThunk } from "@reduxjs/toolkit";
 
 export const fetchText = createAsyncThunk(
   "typingGame/fetchText",
-  async (_, { rejectWithValue }) => {
+  async (params: { quoteLength?: number } = {}, { rejectWithValue }) => {
+    const {quoteLength = 10 } = params;
     try {
-      const response = await fetch("https://fish-text.ru/get?format=json&number=3");
+      const response = await fetch(`https://fish-text.ru/get?format=json&number=${quoteLength}`);
       if (!response.ok) {
         throw new Error(`Ошибка: ${response.status}`);
       }

@@ -8,6 +8,7 @@ interface TypingGameState {
   currentInput: string;
   spacesCount: number;
   errorCount: number;
+  timeSpent: number;
   correctWords: number;
   lockedWords: number[];
   loading: boolean;
@@ -22,6 +23,7 @@ const initialState: TypingGameState = {
   currentInput: "",
   spacesCount: 0,
   errorCount: 0,
+  timeSpent: 0,
   correctWords: 0,
   lockedWords: [],
   loading: false,
@@ -57,7 +59,9 @@ const typingGameSlice = createSlice({
         const inputWord = words[wordIndex] || "";
         const isActive = wordIndex === spacesCount;
         const newWord = [...wordObj.word];
-    
+      
+        let isWordCorrect = inputWord.length > 0; // Предполагаем, что слово корректно, если есть символы
+      
         for (let i = 0; i < inputWord.length; i++) {
           if (i < newWord.length) {
             const isCorrect = inputWord[i] === newWord[i].letter && !newWord[i].isExtra;
@@ -68,19 +72,31 @@ const typingGameSlice = createSlice({
             errorCount++;
           }
         }
-    
+      
         while (newWord.length > inputWord.length && newWord[newWord.length - 1].isExtra) {
           newWord.pop();
         }
-    
+      
         for (let i = inputWord.length; i < newWord.length; i++) {
           if (!newWord[i].isExtra) {
             newWord[i] = { ...newWord[i], isCorrect: null };
           }
         }
-    
+      
+        // Проверяем, является ли слово полностью верным
+        isWordCorrect = newWord.length > 0 && newWord.every((char) => char.isCorrect === true);
+      
+        if (isWordCorrect && !state.lockedWords.includes(wordIndex)) {
+          correctWords++;
+          state.lockedWords.push(wordIndex);
+        } else if (!isWordCorrect && state.lockedWords.includes(wordIndex)) {
+          correctWords--;
+          state.lockedWords = state.lockedWords.filter((index) => index !== wordIndex);
+        }
+      
         return { ...wordObj, isActive, word: newWord };
       });
+      
     
       // Проверка предыдущего слова после нажатия пробела
       if (spacesCount > state.spacesCount) {
@@ -89,7 +105,7 @@ const typingGameSlice = createSlice({
           state.wordsArray[prevWordIndex] &&
           state.wordsArray[prevWordIndex].word.every((char) => char.isCorrect === true)
         ) {
-          correctWords++;
+          // correctWords++;
           if (!state.lockedWords.includes(prevWordIndex)) {
             state.lockedWords.push(prevWordIndex); // Блокируем изменение слова
           }
@@ -106,7 +122,7 @@ const typingGameSlice = createSlice({
       if (spacesCount >= lastWordIndex) {
         const lastWordCorrect = state.wordsArray[lastWordIndex].word.every((char) => char.isCorrect === true);
         if (lastWordCorrect) {
-          correctWords++;
+          // correctWords++;
           if (!state.lockedWords.includes(lastWordIndex)) {
             state.lockedWords.push(lastWordIndex);
           }
@@ -138,6 +154,7 @@ const typingGameSlice = createSlice({
     changeSettings(state) {
       state.currentInput = "";
       state.errorCount = 0;
+      state.timeSpent = 0;
       state.correctWords = 0;
       state.spacesCount = 0;
       state.lockedWords = [];
@@ -152,6 +169,9 @@ const typingGameSlice = createSlice({
     setTestFocused(state, action: PayloadAction<boolean>) {
       state.testFocused = action.payload;
     },
+    setTimeSpent(state, action: PayloadAction<number>){
+      state.timeSpent = action.payload;
+    }
   },
   extraReducers: (builder) => {
     builder
@@ -170,5 +190,5 @@ const typingGameSlice = createSlice({
   },
 });
 
-export const { setInput, resetGame, setWordsArray, changeSettings, setTestFocused, setGameActive } = typingGameSlice.actions;
+export const { setInput, resetGame, setWordsArray, changeSettings, setTestFocused, setGameActive, setTimeSpent } = typingGameSlice.actions;
 export default typingGameSlice.reducer;
